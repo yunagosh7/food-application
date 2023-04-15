@@ -8,4 +8,7 @@
     <string name="categories">Categories</string>
     <string name="would_you_like_to_eat">What would you like to eat</string>
     <string name="populate_items">Over populate items</string>
+    <string name="category">Category: %s</string>
+    <string name="area">Area: %s</string>
+    <string name="instructions">- Instructions: </string>
 </resources>

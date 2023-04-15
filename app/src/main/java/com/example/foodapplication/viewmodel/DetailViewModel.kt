@@ -11,24 +11,28 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel : ViewModel() {
-    private var _randomMeal = MutableLiveData<Meal>()
-    var randomMeal: LiveData<Meal> = _randomMeal
+class DetailViewModel : ViewModel() {
+    private var _mealDetail = MutableLiveData<Meal>()
+    val mealDetail: LiveData<Meal> = _mealDetail
 
-    fun getRandomMeal() {
-        MealApi.api.getRandomMeal().enqueue(object : Callback<MealList> {
+
+
+    fun getById(id: String) {
+        MealApi.api.getById(id).enqueue(object : Callback<MealList> {
             override fun onResponse(call: Call<MealList>, response: Response<MealList>) {
                 if (response.body() != null) {
-                    _randomMeal.value = response.body()!!.meals[0]
-                } else {
+                    _mealDetail.value = response.body()!!.meals[0]
+                }
+                else {
                     return
                 }
             }
 
             override fun onFailure(call: Call<MealList>, t: Throwable) {
-                Log.d("HomeFragment", "Error ${t.message.toString()}")
+                Log.d("DetailViewModel", "Error: ${t.message.toString()}")
             }
         })
     }
+
 
 }
