@@ -6,4 +6,6 @@
     <string name="home">Home</string>
     <string name="favorites">Favorites</string>
     <string name="categories">Categories</string>
+    <string name="would_you_like_to_eat">What would you like to eat</string>
+    <string name="populate_items">Over populate items</string>
 </resources>
