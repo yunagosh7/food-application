@@ -2,18 +2,21 @@ package com.example.foodapplication.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.foodapplication.activities.MealActivity
+import com.example.foodapplication.adapters.CategoriesAdapter
 import com.example.foodapplication.adapters.MostPopularAdapter
 import com.example.foodapplication.databinding.FragmentHomeBinding
-import com.example.foodapplication.pojo.CategoryMeal
+import com.example.foodapplication.pojo.MealsByCategory
 import com.example.foodapplication.pojo.Meal
 import com.example.foodapplication.viewmodel.HomeViewModel
 
@@ -23,6 +26,7 @@ class HomeFragment : Fragment() {
     private lateinit var randomMeal: Meal
 
     private lateinit var popularItemsAdapter: MostPopularAdapter
+    private lateinit var categoriesListAdapter: CategoriesAdapter
 
 
     companion object {
@@ -71,14 +75,21 @@ class HomeFragment : Fragment() {
             binding.recViewMealsPopular.adapter = popularItemsAdapter
         })
 
+        viewModel.getCategories()
+        viewModel.categoryList.observe(viewLifecycleOwner, ) {
+            categoriesListAdapter = CategoriesAdapter(it)
+            binding.recViewCategories.layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
+            binding.recViewCategories.adapter = categoriesListAdapter
+        }
+
 
     }
 
-    private fun onPopularItemClick(categoryMeal: CategoryMeal) {
+    private fun onPopularItemClick(mealsByCategory: MealsByCategory) {
         val intent = Intent(activity, MealActivity::class.java)
-        intent.putExtra(MEAL_ID, categoryMeal.idMeal)
-        intent.putExtra(MEAL_NAME, categoryMeal.strMeal)
-        intent.putExtra(MEAL_THUMB, categoryMeal.strMealThumb)
+        intent.putExtra(MEAL_ID, mealsByCategory.idMeal)
+        intent.putExtra(MEAL_NAME, mealsByCategory.strMeal)
+        intent.putExtra(MEAL_THUMB, mealsByCategory.strMealThumb)
         startActivity(intent)
     }
 
