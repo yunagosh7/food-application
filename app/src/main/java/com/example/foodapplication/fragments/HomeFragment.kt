@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.foodapplication.activities.MealActivity
+import com.example.foodapplication.adapters.MostPopularAdapter
 import com.example.foodapplication.databinding.FragmentHomeBinding
+import com.example.foodapplication.pojo.CategoryMeal
 import com.example.foodapplication.pojo.Meal
 import com.example.foodapplication.viewmodel.HomeViewModel
 
@@ -18,6 +21,8 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
     private lateinit var randomMeal: Meal
+
+    private lateinit var popularItemsAdapter: MostPopularAdapter
 
 
     companion object {
@@ -56,6 +61,25 @@ class HomeFragment : Fragment() {
 
         onRandomClick()
 
+        viewModel.getPopularItems()
+
+        viewModel.popularItems.observe(viewLifecycleOwner, Observer {popularItemsList ->
+            popularItemsAdapter = MostPopularAdapter(popularItemsList) {
+                onPopularItemClick(it)
+            }
+            binding.recViewMealsPopular.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+            binding.recViewMealsPopular.adapter = popularItemsAdapter
+        })
+
+
+    }
+
+    private fun onPopularItemClick(categoryMeal: CategoryMeal) {
+        val intent = Intent(activity, MealActivity::class.java)
+        intent.putExtra(MEAL_ID, categoryMeal.idMeal)
+        intent.putExtra(MEAL_NAME, categoryMeal.strMeal)
+        intent.putExtra(MEAL_THUMB, categoryMeal.strMealThumb)
+        startActivity(intent)
     }
 
     private fun onRandomClick() {
