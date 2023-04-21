@@ -12,10 +12,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.foodapplication.activities.CategoryMealsActivity
+import com.example.foodapplication.activities.MainActivity
 import com.example.foodapplication.activities.MealActivity
 import com.example.foodapplication.adapters.CategoriesAdapter
 import com.example.foodapplication.adapters.MostPopularAdapter
 import com.example.foodapplication.databinding.FragmentHomeBinding
+import com.example.foodapplication.pojo.Category
 import com.example.foodapplication.pojo.MealsByCategory
 import com.example.foodapplication.pojo.Meal
 import com.example.foodapplication.viewmodel.HomeViewModel
@@ -33,13 +36,14 @@ class HomeFragment : Fragment() {
         const val MEAL_ID = "meal_id"
         const val MEAL_NAME = "meal_name"
         const val MEAL_THUMB = "meal_thumb"
+        const val MEAL_CATEGORY = "meal_category"
     }
 
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        viewModel = (activity as MainActivity).viewModel
     }
 
     override fun onCreateView(
@@ -77,7 +81,9 @@ class HomeFragment : Fragment() {
 
         viewModel.getCategories()
         viewModel.categoryList.observe(viewLifecycleOwner, ) {
-            categoriesListAdapter = CategoriesAdapter(it)
+            categoriesListAdapter = CategoriesAdapter(it) {category ->
+                onCategoryClick(category)
+            }
             binding.recViewCategories.layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
             binding.recViewCategories.adapter = categoriesListAdapter
         }
@@ -101,6 +107,12 @@ class HomeFragment : Fragment() {
             intent.putExtra(MEAL_THUMB, randomMeal.strMealThumb)
             startActivity(intent)
         }
+    }
+
+    private fun onCategoryClick(category: Category) {
+        val intent = Intent(activity, CategoryMealsActivity::class.java)
+        intent.putExtra(MEAL_CATEGORY, category.strCategory)
+        startActivity(intent)
     }
 
 }

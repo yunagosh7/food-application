@@ -11,4 +11,5 @@
     <string name="category">Category: %s</string>
     <string name="area">Area: %s</string>
     <string name="instructions">- Instructions: </string>
+    <string name="items">Items: %s</string>
 </resources>

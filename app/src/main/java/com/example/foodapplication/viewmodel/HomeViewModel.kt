@@ -4,19 +4,24 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.foodapplication.database.MealDao
 import com.example.foodapplication.network.MealApi
 import com.example.foodapplication.pojo.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val mealDao: MealDao
+) : ViewModel() {
     private var _randomMeal = MutableLiveData<Meal>()
     val randomMeal: LiveData<Meal> = _randomMeal
     private var _popularItems = MutableLiveData<List<MealsByCategory>>()
     val popularItems: LiveData<List<MealsByCategory>> = _popularItems
     private var _categoryList = MutableLiveData<List<Category>>()
     val categoryList: LiveData<List<Category>> = _categoryList
+    val favoritesMeal = mealDao.getMeals()
 
 
     fun getRandomMeal() {
@@ -70,4 +75,15 @@ class HomeViewModel : ViewModel() {
         })
     }
 
+}
+
+
+class HomeViewModelFactory(private val mealDao: MealDao) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return HomeViewModel(mealDao) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }
