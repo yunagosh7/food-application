@@ -34,12 +34,7 @@ class CategoryMealsActivity : AppCompatActivity() {
         viewModel.getMealsByCategory(category.orEmpty())
         viewModel.categoryList.observe(this, Observer {mealsList ->
             categoryMealsAdapter = CategoryMealsAdapter(mealsList) {meal ->
-                onItemClick(meal
-
-
-
-
-                )
+                onItemClick(meal)
             }
             binding.recMeals.layoutManager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
             binding.recMeals.adapter = categoryMealsAdapter

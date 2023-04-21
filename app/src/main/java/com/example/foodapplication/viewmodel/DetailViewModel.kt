@@ -48,11 +48,6 @@ class DetailViewModel(
         }
     }
 
-    fun deleteMeal(meal: Meal) {
-        CoroutineScope(Dispatchers.IO).launch {
-            mealDao.deleteMeal(meal)
-        }
-    }
 
 }
 

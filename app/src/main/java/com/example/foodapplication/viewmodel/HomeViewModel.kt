@@ -8,6 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.foodapplication.database.MealDao
 import com.example.foodapplication.network.MealApi
 import com.example.foodapplication.pojo.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -73,6 +76,18 @@ class HomeViewModel(
                 Log.d("HomeViewModel", "Error: ${t.message}")
             }
         })
+    }
+
+    fun deleteMeal(meal: Meal) {
+        CoroutineScope(Dispatchers.IO).launch {
+            mealDao.deleteMeal(meal)
+        }
+    }
+
+    fun insertMeal(meal: Meal) {
+        CoroutineScope(Dispatchers.IO).launch {
+            mealDao.insertMeal(meal)
+        }
     }
 
 }
